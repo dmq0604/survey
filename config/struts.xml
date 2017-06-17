@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<constant name="struts.ui.theme" value="simple"/>
+	<constant name="struts.devMode" value="true"/>
+	<constant name="struts.action.extension" value=","/>
+	<package name="survey"  extends="struts-default">
+		<!-- 注册拦截器栈 -->
+		<interceptors>
+			<interceptor name="loginInterceptor" class="com.learn.survey.interceptor.LoginInterceptor"/>
+			<interceptor-stack name="surveyparkStack">
+				<interceptor-ref name="loginInterceptor"/>
+				<interceptor-ref name="defaultStack">
+					<param name="modelDriven.refreshModelBeforeResult">true</param>
+					<param name="fileUpload.maximumSize">60000</param>
+					<param name="fileUpload.allowedType">image/jpg,image/jpeg,image/png,image/gif,image/bmp</param>
+					<param name="fileUpload.allowedExtensions">.jpg,.jpeg,.png,.bmp,.gif</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<!-- 设置默认拦截器栈 -->
+		<default-interceptor-ref name="surveyparkStack"/>
+		<!-- 定义全局结果 -->
+		<global-results>
+			<result name="login">/WEB-INF/view/index.jsp</result>
+			<result name="designSurveyAction" type="redirectAction">/survey-designSurvey?sid=${sid}</result>
+		</global-results>
+		<!-- 注册 -->
+		<action name="reg_*" class="regAction" method="{1}">
+			<result name="index">/WEB-INF/view/reg.jsp</result>
+			<result name="doReg">/WEB-INF/view/index.jsp</result>
+			<result name="input">/WEB-INF/view/reg.jsp</result><!-- 字段校验不通过，会将请求转发到该页面-->
+		</action>
+		<!-- 登录 -->
+		<action name="login_*" class="loginAction" method="{1}">
+			<result name="index">/WEB-INF/view/index.jsp</result>
+			<result name="input">/WEB-INF/view/index.jsp</result>
+			<result name="success">/WEB-INF/view/index.jsp</result>
+		</action>
+		
+		<action name="survey-*" class="surveyAction" method="{1}">
+			<result name="list">/WEB-INF/view/mySurveyList.jsp</result>
+			<result name="designSurvey">/WEB-INF/view/designSurvey.jsp</result>
+			<result name="editSurvey">/WEB-INF/view/editSurvey.jsp</result>
+			<result name="listAction" type="redirectAction">/survey-list</result>
+			<result name="addLogoPage" >/WEB-INF/view/addLogo.jsp</result>
+			<result name="input" >/WEB-INF/view/${inputPage}</result>
+		</action>
+		<action name="page-*" class="pageAction" method="{1}">
+			<result name="addPage">/WEB-INF/view/editPage.jsp</result>
+			<result name="editPage">/WEB-INF/view/editPage.jsp</result>
+		</action>
+		<action name="question-*" class="questionAction" method="{1}">
+			<result name="questionTypePage">/WEB-INF/view/selectQuestionType.jsp</result>
+			<result name="0">/WEB-INF/view/nonMatrixWithOtherQuestionDesign.jsp</result>
+			<result name="1">/WEB-INF/view/nonMatrixWithOtherQuestionDesign.jsp</result>
+			<result name="2">/WEB-INF/view/nonMatrixWithOtherQuestionDesign.jsp</result>
+			<result name="3">/WEB-INF/view/nonMatrixWithOtherQuestionDesign.jsp</result>
+			<result name="4">/WEB-INF/view/nonMatrixSelectQuestionDesign.jsp</result>
+			<result name="5">/WEB-INF/view/nonMatrixTextQuestionDesign.jsp</result>
+			<result name="6">/WEB-INF/view/matrixNormalQuestionDesign.jsp</result>
+			<result name="7">/WEB-INF/view/matrixNormalQuestionDesign.jsp</result>
+			<result name="8">/WEB-INF/view/matrixSelectQuestionDesign.jsp</result>	
+		</action>
+	</package>
+</struts>
